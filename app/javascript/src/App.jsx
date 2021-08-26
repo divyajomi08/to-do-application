@@ -14,7 +14,11 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" render={() => <div>Home</div>} />
+        <Route
+          exact
+          path="/"
+          render={() => <h1>-------------------------Home</h1>}
+        />
         <Route exact path="/about" render={() => <div>About</div>} />
       </Switch>
     </Router>
