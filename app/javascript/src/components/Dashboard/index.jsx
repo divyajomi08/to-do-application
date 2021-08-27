@@ -9,11 +9,13 @@ import PageLoader from "components/PageLoader";
 const Dashboard = ({ history }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
 
   const fetchTasks = async () => {
     try {
       const response = await tasksApi.list();
       setTasks(response.data.tasks);
+      setUsers(response.data.users);
       setLoading(false);
     } catch (error) {
       logger.error(error);
@@ -58,7 +60,12 @@ const Dashboard = ({ history }) => {
 
   return (
     <Container>
-      <Table data={tasks} destroyTask={destroyTask} showTask={showTask} />
+      <Table
+        data={tasks}
+        user={users}
+        destroyTask={destroyTask}
+        showTask={showTask}
+      />
     </Container>
   );
 };

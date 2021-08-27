@@ -5,7 +5,9 @@ class TasksController < ApplicationController
 
   def index
     tasks = Task.all
-    render status: :ok, json: { tasks: tasks }
+    # This line was manually changed to get assigner to vale on dashboard
+    users = User.all
+    render status: :ok, json: { tasks: tasks, users: users }
   end
 
   def create
@@ -19,8 +21,7 @@ class TasksController < ApplicationController
   end
 
   def show
-    task_creator = User.find(@task.user_id).name
-    render status: :ok, json: { task: @task, assigned_user: @task.user, task_creator: task_creator }
+    @task_creator = User.find(@task.user_id).name
   end
 
   def update

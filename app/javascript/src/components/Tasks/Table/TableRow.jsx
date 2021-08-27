@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TableRow = ({ data, destroyTask, showTask }) => {
+const TableRow = ({ data, user, destroyTask, showTask }) => {
   return (
     <tbody className="bg-white divide-y divide-gray-200">
       {data.map(rowData => (
@@ -16,7 +16,8 @@ const TableRow = ({ data, destroyTask, showTask }) => {
             className="px-6 py-4 text-sm font-medium
             leading-5 text-gray-900 whitespace-no-wrap"
           >
-            {rowData.user_id}
+            {/* This line was manually changed to get assigner to vale on dashboard */}
+            {user.filter(user => user.id === rowData.user_id)[0].name}
           </td>
           <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
             <a
@@ -46,6 +47,7 @@ const TableRow = ({ data, destroyTask, showTask }) => {
 
 TableRow.propTypes = {
   data: PropTypes.array.isRequired,
+  user: PropTypes.array.isRequired,
   destroyTask: PropTypes.func,
   showTask: PropTypes.func
 };
