@@ -15,6 +15,12 @@ class TasksController < ApplicationController
       render status: :unprocessable_entity, json: { errors: errors }
     end
   end
+  def show
+    task = Task.find_by_slug!(params[:slug])
+    render status: :ok, json: { task: task }
+  rescue ActiveRecord::RecordNotFound => errors
+    render json: { errors: errors }, status: :not_found
+  end
 
   private
 
