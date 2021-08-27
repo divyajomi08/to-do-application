@@ -4,17 +4,21 @@ import { setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import Dashboard from "components/Dashboard";
 import CreateTask from "components/Tasks/CreateTask";
+import { ToastContainer } from "react-toastify";
+import { registerIntercepts } from "apis/axios";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     initializeLogger();
+    registerIntercepts();
     setAuthHeaders(setLoading);
   }, []);
 
   return (
     <Router>
+      <ToastContainer />
       <Switch>
         <Route exact path="/" render={() => <h1>----------Home</h1>} />
         <Route exact path="/about" render={() => <div>About</div>} />
