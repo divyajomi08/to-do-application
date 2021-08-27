@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import { registerIntercepts } from "apis/axios";
 import ShowTask from "components/Tasks/ShowTask";
 import EditTask from "components/Tasks/EditTask";
+import Signup from "components/Authentication/Signup";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -22,6 +23,7 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
+        <Route exact path="/signup" component={Signup} />
         <Route exact path="/tasks/:slug/edit" component={EditTask} />
         <Route exact path="/tasks/:slug/show" component={ShowTask} />
         <Route exact path="/" render={() => <h1>----------Home</h1>} />
