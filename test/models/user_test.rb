@@ -4,21 +4,21 @@ require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(
-      name: "Sam Smith",
-      email: "sam@example.com",
-      password: "welcome",
-      password_confirmation: "welcome")
+    @user = build(:user)
   end
+
+  # embed new test cases here...
   def test_user_should_be_not_be_valid_without_name
     @user.name = ""
     assert_not @user.valid?
     assert_equal ["Name can't be blank"], @user.errors.full_messages
   end
+
   def test_name_should_be_of_valid_length
     @user.name = "a" * 50
     assert @user.invalid?
   end
+
   def test_user_should_be_not_be_valid_and_saved_without_email
     @user.email = ""
     assert_not @user.valid?
@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
     @user.save
     assert_equal ["Email can't be blank", "Email is invalid"],
       @user.errors.full_messages
-  end
+end
 
   def test_user_should_not_be_valid_and_saved_if_email_not_unique
     @user.save!
@@ -62,12 +62,13 @@ class UserTest < ActiveSupport::TestCase
       assert @user.invalid?
     end
   end
+
   def test_user_should_not_be_saved_without_password
     @user.password = nil
     assert_not @user.save
     assert_equal ["Password can't be blank"],
       @user.errors.full_messages
-  end
+end
 
   def test_user_should_not_be_saved_without_password_confirmation
     @user.password_confirmation = nil
@@ -85,12 +86,9 @@ class UserTest < ActiveSupport::TestCase
 
   def test_users_should_have_unique_auth_token
     @user.save!
-    second_user = User.create!(
-      name: "Olive Sans", email: "olive@example.com",
-      password: "welcome", password_confirmation: "welcome")
+    second_user = create(:user)
 
     assert_not_same @user.authentication_token,
       second_user.authentication_token
-  end
-  # embed new test cases here...
+   end
 end
