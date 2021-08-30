@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
+  before_action :authenticate_user_using_x_auth_token, except: [:new, :edit]
   before_action :load_task, only: %i[show update destroy]
 
   def index
@@ -13,7 +14,7 @@ class TasksController < ApplicationController
   def create
     task = Task.new(task_params)
     if task.save
-      render status: :ok, json: { notice: t("successfully_created", entity: "Task") }
+      render status: :ok, json: { notice: "Task was successfully created!" }
     else
       errors = task.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { errors: errors }
