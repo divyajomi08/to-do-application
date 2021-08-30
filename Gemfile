@@ -34,6 +34,7 @@ group :development, :test do
   gem "rubocop"
   gem "rubocop-rails"
   gem "bcrypt", "~> 3.1.13"
+  gem "simplecov", require: false, group: :test
 end
 
 group :development do
