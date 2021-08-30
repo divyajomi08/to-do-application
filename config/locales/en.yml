@@ -31,6 +31,8 @@
 
 
 en:
+  authorization:
+    denied: "Access denied. You are not authorized to perform this action."
   hello: "Hello world"
   session:
     could_not_auth: "Could not authenticate with the provided credentials."
@@ -39,4 +41,3 @@ en:
   task:
     slug:
       immutable: "is immutable!"
-

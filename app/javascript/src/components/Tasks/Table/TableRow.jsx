@@ -17,7 +17,7 @@ const TableRow = ({ data, user, destroyTask, showTask }) => {
             leading-5 text-gray-900 whitespace-no-wrap"
           >
             {/* This line was manually changed to get assigner to vale on dashboard */}
-            {user.filter(user => user.id === rowData.user_id)[0].name}
+            {rowData.user_id}
           </td>
           <td className="px-6 py-4 text-sm font-medium leading-5 text-right cursor-pointer">
             <a

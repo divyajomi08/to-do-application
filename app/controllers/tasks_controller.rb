@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
   before_action :authenticate_user_using_x_auth_token
   before_action :load_task, only: %i[show update destroy]
 
   def index
-    tasks = Task.all
-    # This line was manually changed to get assigner to vale on dashboard
-    users = User.all
-    render status: :ok, json: { tasks: tasks, users: users }
+    tasks = policy_scope(Task)
+    @tasks = TaskPolicy::Scope.new(current_user, Task).resolve
+    render status: :ok, json: { tasks: tasks }
   end
 
   def create
     @task = Task.new(task_params.merge(creator_id: @current_user.id))
+    authorize @task
     if @task.save
-      render status: :ok, json: { notice: t("successfully_created", entity: "Task") }
+      render status: :ok,
+        json: { notice: t("successfully_created", entity: "Task") }
     else
       errors = @task.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { errors: errors }
@@ -22,37 +25,39 @@ class TasksController < ApplicationController
   end
 
   def show
-    @task_creator = User.find(@task.user_id).name
+    authorize @task
+    @task_creator = User.find(@task.creator_id).name
   end
 
   def update
+    authorize @task
     if @task.update(task_params)
-      render status: :ok, json: { notice: "Successfully updated task." }
+      render status: :ok, json: {}
     else
-      render status: :unprocessable_entity, json: { errors: @task.errors.full_messages.to_sentence }
+      render status: :unprocessable_entity,
+        json: { errors: @task.errors.full_messages.to_sentence }
     end
   end
 
   def destroy
+    authorize @task
     if @task.destroy
-      render status: :ok, json: { notice: "Successfully deleted task." }
+      render status: :ok, json: {}
     else
-      render status: :unprocessable_entity, json: {
-        errors:
-              @task.errors.full_messages.to_sentence
-      }
+      render status: :unprocessable_entity,
+        json: { errors: @task.errors.full_messages.to_sentence }
     end
   end
 
   private
 
     def task_params
-      params.require(:task).permit(:title)
+      params.require(:task).permit(:title, :user_id)
     end
 
     def load_task
       @task = Task.find_by_slug!(params[:slug])
-    rescue ActiveRecord::RecordNotFound => errors
-      render json: { errors: errors }
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { errors: e }, status: :not_found
     end
 end

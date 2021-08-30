@@ -21,13 +21,15 @@ const EditTask = ({ history }) => {
     try {
       await tasksApi.update({
         slug,
-        payload: { task: { title, user_id: userId } }
+        payload: {
+          task: { title, user_id: userId }
+        }
       });
+      setLoading(false);
       history.push("/");
     } catch (error) {
-      logger.error(error);
-    } finally {
       setLoading(false);
+      logger.error(error);
     }
   };
 
