@@ -54,3 +54,7 @@ export const registerIntercepts = () => {
     handleErrorResponse(error)
   );
 };
+export const resetAuthTokens = () => {
+  delete axios.defaults.headers["X-Auth-Email"];
+  delete axios.defaults.headers["X-Auth-Token"];
+};
