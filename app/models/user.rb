@@ -18,7 +18,9 @@ class User < ApplicationRecord
     presence: true,
     confirmation: true,
     length: { minimum: 6 }
-  validates :password_confirmation, presence: true, on: :create
+  validates :password_confirmation,
+    presence: true,
+    on: :create
 
   before_save :to_lowercase
 
