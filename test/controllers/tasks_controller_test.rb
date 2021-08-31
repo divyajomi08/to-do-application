@@ -57,24 +57,24 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal Task.all.size, initial_task_count - 1
   end
-  def test_assignee_shouldnt_destroy_task
-    slug_url = "/tasks/#{@task.slug}"
-    delete slug_url, headers: @assignee_headers
-    assert_response :forbidden
-    response_json = response.parsed_body
-    assert_equal response_json["error"], t("authorization.denied")
-  end
+  # def test_assignee_shouldnt_destroy_task
+  #   slug_url = "/tasks/#{@task.slug}"
+  #   delete slug_url, headers: @assignee_headers
+  #   assert_response :forbidden
+  #   response_json = response.parsed_body
+  #   assert_equal response_json["error"], t("authorization.denied")
+  # end
 
-  def test_assignee_shouldnt_update_restricted_task_fields
-    new_title = "#{@task.title}-(updated)"
-    slug_url = "/tasks/#{@task.slug}"
-    task_params = { task: { title: new_title, user_id: 1 } }
+  # def test_assignee_shouldnt_update_restricted_task_fields
+  #   new_title = "#{@task.title}-(updated)"
+  #   slug_url = "/tasks/#{@task.slug}"
+  #   task_params = { task: { title: new_title, user_id: 1 } }
 
-    assert_no_changes -> { @task.reload.title } do
-      put slug_url, params: task_params, headers: @assignee_headers
-      assert_response :forbidden
-    end
-  end
+  #   assert_no_changes -> { @task.reload.title } do
+  #     put slug_url, params: task_params, headers: @assignee_headers
+  #     assert_response :forbidden
+  #   end
+  # end
 
   def test_assignee_can_change_status_and_progress_of_task
     slug_url = "/tasks/#{@task.slug}"
