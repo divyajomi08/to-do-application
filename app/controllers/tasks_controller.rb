@@ -9,8 +9,8 @@ class TasksController < ApplicationController
 
   def index
     tasks = policy_scope(Task)
-    @pending_tasks = tasks.pending
-    @completed_tasks = tasks.completed
+    @pending_tasks = tasks.of_status(:pending).as_json(include: { user: { only: %i[name id] } })
+    @completed_tasks = tasks.of_status(:completed)
     # @tasks = TaskPolicy::Scope.new(current_user, Task).resolve
     # render status: :ok, json: { tasks: tasks }
   end
@@ -56,7 +56,7 @@ class TasksController < ApplicationController
   private
 
     def task_params
-      params.require(:task).permit(:title, :user_id, :progress)
+      params.require(:task).permit(:title, :user_id, :progress, :status)
     end
 
     def load_task
@@ -71,5 +71,5 @@ class TasksController < ApplicationController
       if is_editing_restricted_params && is_not_owner
         authorization_error
       end
-    end
+  end
 end
