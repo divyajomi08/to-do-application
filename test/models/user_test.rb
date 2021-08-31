@@ -7,18 +7,6 @@ class UserTest < ActiveSupport::TestCase
     @user = build(:user)
   end
 
-  # embed new test cases here...
-  # def test_user_should_be_not_be_valid_without_name
-  #   @user.name = ""
-  #   assert_not @user.valid?
-  #   assert_equal ["Name can't be blank"], @user.errors.full_messages
-  # end
-
-  # def test_name_should_be_of_valid_length
-  #   @user.name = "a" * 50
-  #   assert @user.invalid?
-  # end
-
   def test_user_should_be_not_be_valid_and_saved_without_email
     @user.email = ""
     assert_not @user.valid?
@@ -43,16 +31,6 @@ end
     assert @user.invalid?
   end
 
-  # def test_validation_should_accept_valid_addresses
-  #   valid_emails = %w[user@example.com USER@example.COM US-ER@example.org
-  #                       first.last@example.in user+one@example.ac.in]
-
-  #   valid_emails.each do |email|
-  #     @user.email = email
-  #     assert @user.valid?
-  #   end
-  # end
-
   def test_validation_should_reject_invalid_addresses
     invalid_emails = %w[user@example,com user_at_example.org user.name@example.
                           @sam-sam.com sam@sam+exam.com fishy+#.com]
@@ -76,13 +54,6 @@ end
     assert_equal ["Password confirmation can't be blank"],
       @user.errors.full_messages
   end
-
-  # def test_user_should_match_password_and_password_confirmation
-  #   @user.password_confirmation = ""
-  #   assert_not @user.save
-  #   assert_equal ["Password confirmation doesn't match Password"],
-  #     @user.errors.full_messages
-  # end
 
   def test_users_should_have_unique_auth_token
     @user.save!
