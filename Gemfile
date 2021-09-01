@@ -33,6 +33,10 @@ group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "rubocop"
   gem "rubocop-rails"
+  gem "factory_bot_rails"
+
+  # For auto-generating demo data
+  gem "faker"
 
 end
 
@@ -58,10 +62,7 @@ gem "react-rails"
 gem "letter_opener", group: :development
 gem "sqlite3", "~> 1.4", group: [:development, :test]
 gem "pg", group: [:production]
-gem "factory_bot_rails"
 
-# For auto-generating demo data
-gem "faker"
 gem "pundit"
 gem "sidekiq"
 gem "sidekiq-cron"
