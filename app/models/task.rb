@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Task < ApplicationRecord
+  after_create :log_task_details
   RESTRICTED_ATTRIBUTES = %i[title user_id]
   validates :title, presence: true, length: { maximum: 50 }
   validates :slug, uniqueness: true
@@ -44,5 +45,8 @@ class Task < ApplicationRecord
         unstarred = completed.unstarred.order("updated_at DESC")
       end
       starred + unstarred
+    end
+    def log_task_details
+      TaskLoggerJob.perform_later(self)
     end
 end
