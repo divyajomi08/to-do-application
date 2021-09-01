@@ -48,7 +48,7 @@ const MyPreferences = () => {
     fetchPreferenceDetails();
   }, []);
 
-  if (pageLoading || !userId || !preferenceId) {
+  if (pageLoading || !userId) {
     return (
       <div className="w-screen h-screen">
         <PageLoader />
