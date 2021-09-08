@@ -1,6 +1,74 @@
+// import axios from "axios";
+// import Toastr from "components/Common/Toastr";
+// import { setToLocalStorage, getFromLocalStorage } from "helpers/storage.js";
+
+// axios.defaults.baseURL = "/";
+
+// export const setAuthHeaders = (setLoading = () => null) => {
+//   axios.defaults.headers = {
+//     Accept: "application/json",
+//     "Content-Type": "application/json",
+//     "X-CSRF-TOKEN": document
+//       .querySelector('[name="csrf-token"]')
+//       .getAttribute("content")
+//   };
+//   const token = getFromLocalStorage("authToken");
+//   const email = getFromLocalStorage("authEmail");
+
+//   if (token && email) {
+//     axios.defaults.headers["X-Auth-Email"] = email;
+//     axios.defaults.headers["X-Auth-Token"] = token;
+//   }
+//   setLoading(false);
+// };
+
+// const handleSuccessResponse = response => {
+//   if (response) {a
+//     response.success = response.status === 200;
+//     if (response.data.notice) {
+//       Toastr.success(response.data.notice);
+//     }
+//   }
+//   return response;
+// };
+
+// const handleErrorResponse = error => {
+//   if (error.response?.status === 401) {
+//     setToLocalStorage({
+//       authToken: null,
+//       email: null,
+//       userId: null,
+//       userName: null
+//     });
+//   }
+//   Toastr.error(
+//     error.response?.data?.error ||
+//       error.response?.data?.notice ||
+//       error.message ||
+//       error.notice ||
+//       "Something went wrong!"
+//   );
+//   if (error.response?.status === 423) {
+//     window.location.href = "/";
+//   }
+//   return Promise.reject(error);
+// };
+
+// export const registerIntercepts = () => {
+//   axios.interceptors.response.use(handleSuccessResponse, error =>
+//     handleErrorResponse(error)
+//   );
+// };
+// export const resetAuthTokens = () => {
+//   delete axios.defaults.headers["X-Auth-Email"];
+//   delete axios.defaults.headers["X-Auth-Token"];
+// };
+
 import axios from "axios";
 import Toastr from "components/Common/Toastr";
 import { setToLocalStorage, getFromLocalStorage } from "helpers/storage.js";
+
+const DEFAULT_ERROR_NOTIFICATION = "Something went wrong!";
 
 axios.defaults.baseURL = "/";
 
@@ -14,7 +82,6 @@ export const setAuthHeaders = (setLoading = () => null) => {
   };
   const token = getFromLocalStorage("authToken");
   const email = getFromLocalStorage("authEmail");
-
   if (token && email) {
     axios.defaults.headers["X-Auth-Email"] = email;
     axios.defaults.headers["X-Auth-Token"] = token;
@@ -32,26 +99,17 @@ const handleSuccessResponse = response => {
   return response;
 };
 
-const handleErrorResponse = error => {
-  if (error.response?.status === 401) {
-    setToLocalStorage({
-      authToken: null,
-      email: null,
-      userId: null,
-      userName: null
-    });
+const handleErrorResponse = axiosErrorObject => {
+  if (axiosErrorObject.response?.status === 401) {
+    setToLocalStorage({ authToken: null, email: null, userId: null });
   }
   Toastr.error(
-    error.response?.data?.error ||
-      error.response?.data?.notice ||
-      error.message ||
-      error.notice ||
-      "Something went wrong!"
+    axiosErrorObject.response?.data?.error || DEFAULT_ERROR_NOTIFICATION
   );
-  if (error.response?.status === 423) {
+  if (axiosErrorObject.response?.status === 423) {
     window.location.href = "/";
   }
-  return Promise.reject(error);
+  return Promise.reject(axiosErrorObject);
 };
 
 export const registerIntercepts = () => {

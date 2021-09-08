@@ -20,8 +20,8 @@ const ToastrComponent = ({ type, message }) => {
 
   return (
     <div className="flex flex-row items-start justify-start">
-      <i className={icon}></i>
-      <p className="mx-4 font-medium leading-5 text-white">{message}</p>
+      {/* <i className={icon}></i> */}
+      <p className="mx-4 font-medium leading-5 text-black">{message}</p>
     </div>
   );
 };
